@@ -103,7 +103,7 @@ if __name__ == "__main__":
                 # 生成唯一文件名
                 filename = input('请输入文件名:')
                 # 保存图片到当前目录
-                cv2.imwrite("face_dataset/"+filename+'.jpg', frame)
+                cv2.imwrite("face_dataset/"+filename+'_1.jpg', frame)
                 print(f"图片已保存为 {filename+'.jpg'}")
                 list_dir = os.listdir("face_dataset")
                 image_paths = []
@@ -112,6 +112,7 @@ if __name__ == "__main__":
                     image_paths.append("face_dataset/"+name)
                     names.append(name.split("_")[0])
                 retinaface.encode_face_dataset(image_paths, names)
+                retinaface = Retinaface()
             # 进行检测
             frame = np.array(retinaface.detect_image(frame))
             # RGBtoBGR满足opencv显示格式
