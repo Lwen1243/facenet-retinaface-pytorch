@@ -12,13 +12,7 @@ from retinaface import Retinaface
 
 import os
 
-def encoding():
-    list_dir = os.listdir("face_dataset")
-    image_paths = []
-    names = []
-    for name in list_dir:
-        image_paths.append("face_dataset/"+name)
-        names.append(name.split("_")[0])
+import uuid
 
 if __name__ == "__main__":
     retinaface = Retinaface()
@@ -93,6 +87,7 @@ if __name__ == "__main__":
             t1 = time.time()
             # 读取某一帧
             ref, frame = capture.read()
+            old_frame = frame
             if not ref:
                 break
             # 格式转变，BGRtoRGB
@@ -102,9 +97,10 @@ if __name__ == "__main__":
             if key == 32:  # 空格键的ASCII码是32
                 # 生成唯一文件名
                 filename = input('请输入文件名:')
+                filename = 'face_dataset/'+filename+"_"+str(uuid.uuid4())+'.jpg'
                 # 保存图片到当前目录
-                cv2.imwrite("face_dataset/"+filename+'_1.jpg', frame)
-                print(f"图片已保存为 {filename+'.jpg'}")
+                cv2.imwrite(filename, old_frame)
+                print(f"图片已保存在 {filename}")
                 list_dir = os.listdir("face_dataset")
                 image_paths = []
                 names = []
