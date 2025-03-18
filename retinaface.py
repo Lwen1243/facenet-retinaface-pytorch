@@ -1,3 +1,12 @@
+'''
+0 左
+1 右
+2 上
+3 下
+
+'''
+
+
 import time
 
 import cv2
@@ -89,7 +98,7 @@ class Retinaface(object):
         #   是否使用Cuda
         #   没有GPU可以设置成False
         #--------------------------------#
-        "cuda"                  : True
+        "cuda"                  : False
     }
 
     @classmethod
@@ -363,7 +372,31 @@ class Retinaface(object):
         #---------------------------------------------------#
         #   Retinaface检测部分-结束
         #---------------------------------------------------#
-        
+            best_face_location  = None
+            biggest_area        = 0
+            for result in boxes_conf_landms:
+                left, top, right, bottom = result[0:4]
+
+                w = right - left
+                h = bottom - top
+                if w * h > biggest_area:
+                    biggest_area = w * h
+                    best_face_location = result
+            
+            ce_x = (best_face_location[0] + best_face_location[2]) // 2
+            ce_y = (best_face_location[1] + best_face_location[3]) // 2
+            im_center_x = im_width // 2
+            im_center_y = im_height // 2
+            if im_center_x - ce_x > 20:
+                print(0)
+            else:
+                print(1)
+            if im_center_y - ce_y < -20:
+                print(3)
+            else:
+                print(2)
+            # print(f"im_x:{im_center_x}, im_y:{im_center_y}")
+            # print(f"ce_x:{ce_x}, ce_y:{ce_y}")
         #-----------------------------------------------#
         #   Facenet编码部分-开始
         #-----------------------------------------------#
