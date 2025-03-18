@@ -10,6 +10,16 @@ import numpy as np
 
 from retinaface import Retinaface
 
+import os
+
+def encoding():
+    list_dir = os.listdir("face_dataset")
+    image_paths = []
+    names = []
+    for name in list_dir:
+        image_paths.append("face_dataset/"+name)
+        names.append(name.split("_")[0])
+
 if __name__ == "__main__":
     retinaface = Retinaface()
     #----------------------------------------------------------------------------------------------------------#
@@ -87,6 +97,21 @@ if __name__ == "__main__":
                 break
             # 格式转变，BGRtoRGB
             frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+            # 读取空格，拍照保存
+            key = cv2.waitKey(1)
+            if key == 32:  # 空格键的ASCII码是32
+                # 生成唯一文件名
+                filename = input('请输入文件名:')
+                # 保存图片到当前目录
+                cv2.imwrite("face_dataset/"+filename+'.jpg', frame)
+                print(f"图片已保存为 {filename+'.jpg'}")
+                list_dir = os.listdir("face_dataset")
+                image_paths = []
+                names = []
+                for name in list_dir:
+                    image_paths.append("face_dataset/"+name)
+                    names.append(name.split("_")[0])
+                retinaface.encode_face_dataset(image_paths, names)
             # 进行检测
             frame = np.array(retinaface.detect_image(frame))
             # RGBtoBGR满足opencv显示格式
@@ -97,13 +122,6 @@ if __name__ == "__main__":
             frame = cv2.putText(frame, "fps= %.2f"%(fps), (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             
             cv2.imshow("video",frame)
-            c= cv2.waitKey(1) & 0xff 
-            if video_save_path!="":
-                out.write(frame)
-
-            if c==27:
-                capture.release()
-                break
         print("Video Detection Done!")
         capture.release()
         if video_save_path!="":
@@ -117,8 +135,6 @@ if __name__ == "__main__":
         tact_time = retinaface.get_FPS(img, test_interval)
         print(str(tact_time) + ' seconds, ' + str(1/tact_time) + 'FPS, @batch_size 1')
     elif mode == "dir_predict":
-        import os
-
         from tqdm import tqdm
 
         img_names = os.listdir(dir_origin_path)

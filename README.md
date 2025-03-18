@@ -15,7 +15,7 @@ retinaface人脸检测仓库为，可以训练也可以预测：https://github.c
 facenet人脸识别仓库为，可以训练也可以预测：https://github.com/bubbliiiing/facenet-pytorch       
 
 ## 所需环境
-pytorch==1.2.0 
+pytorch==2.6.0
 
 ## 文件下载
 预测所需的权值文件可以在百度云下载。     

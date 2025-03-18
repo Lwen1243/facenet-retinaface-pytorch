@@ -404,6 +404,7 @@ class Retinaface(object):
             #-----------------------------------------------------#
             #   取出一张脸并与数据库中所有的人脸进行对比，计算得分
             #-----------------------------------------------------#
+            
             matches, face_distances = compare_faces(self.known_face_encodings, face_encoding, tolerance = self.facenet_threhold)
             name = "Unknown"
             #-----------------------------------------------------#
